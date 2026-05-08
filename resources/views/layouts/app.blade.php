@@ -206,6 +206,11 @@
                                         <i class="bi bi-list-ul"></i> Товары с категориями
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('/catalog') }}">
+                                        <i class="bi bi-grid-3x3-gap-fill"></i> Каталог товаров
+                                    </a>
+                                </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form action="{{ route('admin.sync') }}" method="POST">

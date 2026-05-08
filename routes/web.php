@@ -75,3 +75,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/{image}', [ProductImageController::class, 'destroy'])->name('destroy');
     });
 });
+
+    Route::get('/admin/products/{product}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/admin/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');

@@ -92,4 +92,28 @@ class ProductController extends Controller
 
         return view('shop.product', compact('product', 'relatedProducts'));
     }
+
+    public function edit(Product $product)
+    {
+        $categories = Category::all();
+
+        return view('admin.products.edit', compact('product', 'categories'));
+    }
+
+    public function update(Request $request, Product $product)
+    {
+
+        $request->validate([
+            'description' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $product->update([
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+        ]);
+
+        return redirect()->route('admin.products.edit', $product->id)
+            ->with('success', 'Товар обновлен');
+    }
 }

@@ -189,9 +189,18 @@
                                         </div>
                                         <div class="d-grid">
                                             @if($product->amount > 0)
-                                                <button class="btn btn-primary add-to-cart" data-id="{{ $product->id }}">
-                                                    <i class="bi bi-cart-plus"></i> В корзину
-                                                </button>
+                                                @if(Auth::user()->is_admin)
+                                                    {{-- Кнопки для админа --}}
+                                                    <div class="container mb-2">
+                                                        <a href="/admin/products/{{ $product->id }}/edit" class="btn btn-primary">✏️ Изменить</a>
+                                                        <a href="/admin/products/{{ $product->id }}/images" class="btn btn-secondary">🖼️ Фото</a>
+                                                    </div>
+                                                @else
+                                                    {{-- Кнопка для пользователя --}}
+                                                    <button class="btn btn-primary add-to-cart" data-id="{{ $product->id }}">
+                                                        <i class="bi bi-cart-plus"></i> В корзину
+                                                    </button>
+                                                @endif
                                             @else
                                                 <button class="btn btn-secondary" disabled>
                                                     <i class="bi bi-x-circle"></i> Нет в наличии
