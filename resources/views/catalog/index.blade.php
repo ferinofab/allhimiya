@@ -219,7 +219,7 @@
 
                     <!-- Пагинация -->
                     <div class="mt-5 d-flex justify-content-center">
-                        {{ $products->links() }}
+                        {{ $products->links('pagination::bootstrap-5') }}
                     </div>
                 @else
                     <div class="text-center py-5">
