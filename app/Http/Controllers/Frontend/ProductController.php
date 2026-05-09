@@ -11,7 +11,10 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $newProducts = Product::orderBy('created_at', 'desc')->take(6)->get();
+        $newProducts = Product::whereNotNull('category_id')
+            ->latest()
+            ->take(6)
+            ->get();
         return view('shop.index', compact('newProducts'));
     }
 
@@ -55,7 +58,9 @@ class ProductController extends Controller
                 $query->latest();
         }
 
-        $products = $query->paginate(12)->withQueryString();
+        $products = $query   ->whereNotNull('category_id')
+            ->paginate(12)
+            ->withQueryString();
         $categories = Category::all();
         $selectedCategory = $request->category;
 

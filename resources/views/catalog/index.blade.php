@@ -159,10 +159,14 @@
                                             <i class="bi bi-tag"></i> Скидка
                                         </span>
                                         @endif
-                                        <img src="{{ $product->image_url ?? 'https://placehold.co/300x200/e9ecef/495057?text=' . urlencode($product->name) }}"
-                                             class="card-img-top product-img"
-                                             style="height: 180px; object-fit: contain; padding: 1rem;"
-                                             alt="{{ $product->name }}">
+                                            <img src="{{ asset($product->main_image_url ??
+                                                $product->images->first()?->image_path ??
+                                                $product->image_url ??
+                                                '/storage/products/495057.svg') }}"
+                                                 id="mainImage"
+                                                 class="img-fluid rounded"
+                                                 style="max-height: 400px; width: auto; object-fit: contain;"
+                                                 alt="{{ $product->name }}">
                                     </div>
                                     <div class="card-body text-center">
                                         <h6 class="card-title fw-bold">
@@ -189,7 +193,7 @@
                                         </div>
                                         <div class="d-grid">
                                             @if($product->amount > 0)
-                                                @if(Auth::user()->is_admin)
+                                                @if(Auth::user()->is_admin??null)
                                                     {{-- Кнопки для админа --}}
                                                     <div class="container mb-2">
                                                         <a href="/admin/products/{{ $product->id }}/edit" class="btn btn-primary">✏️ Изменить</a>

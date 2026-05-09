@@ -70,10 +70,18 @@
             @foreach($newProducts as $product)
                 <div class="col-md-4 mb-4 d-flex justify-content-center">
                     <div class="card product-card" style="width: 100%; max-width: 320px;">
-                        <img src="{{ $product->image_url ?? 'https://placehold.co/300x200/e9ecef/495057?text=' . urlencode($product->name) }}"
-                             class="card-img-top product-img"
-                             style="height: 200px; object-fit: contain; padding: 1rem;"
-                             alt="{{ $product->name }}">
+                        <div class="p-3 text-center bg-light">
+                        {{-- Главное изображение --}}
+                            <img src="{{ asset($product->main_image_url ??
+                                $product->images->first()?->image_path ??
+                                $product->image_url ??
+                               '/storage/products/495057.svg') }}"
+                                 id="mainImage"
+                                 class="img-fluid rounded"
+                                 style="max-height: 400px; width: auto; object-fit: contain;"
+                                 alt="{{ $product->name }}">
+                        </div>
+
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ Str::limit($product->name, 40) }}</h5>
                             <p class="card-text fw-bold text-primary">{{ number_format($product->price, 2) }} ₽</p>

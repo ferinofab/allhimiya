@@ -33,6 +33,9 @@ class MoySkladService
 
         if (!$response->successful()) {
             Log::error('MoySklad API error: ' . $response->status());
+            // --- НОВАЯ ОТЛАДКА ---
+            Log::error('MoySklad API Response Body: ' . $response->body());
+            // ---------------------
             return 0;
         }
 
@@ -71,7 +74,10 @@ class MoySkladService
         ]);
 
         if (!$response->successful()) {
-            Log::error('MoySklad stocks error: ' . $response->status());
+            Log::error('MoySklad API error: ' . $response->status());
+            // --- НОВАЯ ОТЛАДКА ---
+            Log::error('MoySklad API Response Body: ' . $response->body());
+            // ---------------------
             return 0;
         }
 
