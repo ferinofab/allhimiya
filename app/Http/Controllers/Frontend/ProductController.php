@@ -61,10 +61,13 @@ class ProductController extends Controller
         $products = $query   ->whereNotNull('category_id')
             ->paginate(12)
             ->withQueryString();
-        $categories = Category::all();
         $selectedCategory = $request->category;
 
-        return view('catalog.index', compact('products', 'categories', 'selectedCategory'));
+            $parentCategories = Category::with(['children' => function($q) {
+                $q->withCount('products');
+            }])->withCount('products')->whereNull('parent_id')->get();
+
+        return view('catalog.index', compact('products',  'selectedCategory', 'parentCategories'));
     }
 
     public function category($slug)
@@ -79,9 +82,14 @@ class ProductController extends Controller
 
         // Если нет дочерних - показываем товары
         $products = Product::where('category_id', $category->id)->paginate(12);
-        $categories = Category::all();
 
-        return view('catalog.index', compact('products', 'categories', 'category'));
+
+        $parentCategories = Category::with(['children' => function($q) {
+            $q->withCount('products');
+        }])->withCount('products')->whereNull('parent_id')->get();
+
+
+        return view('catalog.index', compact('products',  'category', 'parentCategories'));
     }
 
     public function show($id)
@@ -95,7 +103,15 @@ class ProductController extends Controller
             ->limit(4)
             ->get();
 
-        return view('shop.product', compact('product', 'relatedProducts'));
+
+        $reviews = $product->approvedReviews()
+            ->with('user')
+            ->latest()
+            ->paginate(10);
+
+        $averageRating = $product->averageRating();
+
+        return view('shop.product', compact('product', 'relatedProducts', 'reviews', 'averageRating'));
     }
 
     public function edit(Product $product)

@@ -25,9 +25,13 @@
                                     <tbody>
                                     @foreach($cart->items as $item)
                                         <tr data-item-id="{{ $item->id }}">
+                                            <!-- Товар -->
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ $item->product->image_url ?? 'https://placehold.co/60x60/e9ecef/495057?text=' . urlencode(substr($item->product->name, 0, 20)) }}"
+                                                    <img src="{{ asset($item->product->main_image_url ??
+                                                $item->product->images->first()?->image_path ??
+                                                $item->product->image_url ??
+                                                '/storage/products/495057.svg') }}"
                                                          alt="{{ $item->product->name }}"
                                                          style="width: 60px; height: 60px; object-fit: cover;"
                                                          class="rounded me-3">
@@ -36,37 +40,43 @@
                                                         <small class="text-muted">Артикул: {{ $item->product->sku ?? '—' }}</small>
                                                     </div>
                                                 </div>
+                                            </td>
+                                            <!-- Цена -->
+                                            <td>{{ number_format($item->price, 2) }} ₽</td>
+                                            <!-- Количество -->
+                                            <td>
+                                                <div class="input-group" style="width: 130px;">
+                                                    <button class="btn btn-outline-secondary btn-minus" type="button">
+                                                        <i class="bi bi-dash"></i>
+                                                    </button>
+                                                    <input type="number"
+                                                           class="form-control text-center quantity"
+                                                           value="{{ $item->quantity }}"
+                                                           min="1"
+                                                           max="{{ $item->product->amount }}"
+                                                           style="max-width: 50px;">
+                                                    <button class="btn btn-outline-secondary btn-plus" type="button">
+                                                        <i class="bi bi-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <!-- Сумма -->
+                                            <td class="item-total fw-bold">{{ number_format($item->quantity * $item->price, 2) }} ₽</td>
+                                            <!-- Удалить -->
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-danger btn-remove" title="Удалить">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             </div>
-                            <td>{{ number_format($item->price, 2) }} ₽</div>
-                        <td>
-                            <div class="input-group" style="width: 130px;">
-                                <button class="btn btn-outline-secondary btn-minus" type="button">
-                                    <i class="bi bi-dash"></i>
-                                </button>
-                                <input type="number"
-                                       class="form-control text-center quantity"
-                                       value="{{ $item->quantity }}"
-                                       min="1"
-                                       max="{{ $item->product->amount }}"
-                                       style="max-width: 50px;">
-                                <button class="btn btn-outline-secondary btn-plus" type="button">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            </div>
+                        </div>
                     </div>
-                    <td class="item-total fw-bold">{{ number_format($item->quantity * $item->price, 2) }} ₽</div>
-                <td>
-                    <button class="btn btn-sm btn-outline-danger btn-remove" title="Удалить">
-                        <i class="bi bi-trash"></i>
-                    </button>
+                </div>
             </div>
-            </tr>
-            @endforeach
-            </tbody>
-            </table>
-    </div>
-    </div>
-    </div>
 
     <div class="mt-3">
         <a href="{{ route('catalog') }}" class="btn btn-outline-secondary">

@@ -32,4 +32,26 @@ class Product extends Model
     {
         return $this->hasOne(ProductImage::class)->where('is_main', true);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function approvedReviews()
+    {
+        return $this->hasMany(Review::class)->where('status', 'approved');
+    }
+
+    public function averageRating(): float
+    {
+        $avg = $this->approvedReviews()->avg('rating');
+
+        if (is_null($avg)) {
+            return 0;
+        }
+
+        // Округление в большую сторону до десятых
+        return ceil($avg * 10) / 10;
+    }
 }

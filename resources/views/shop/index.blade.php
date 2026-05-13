@@ -10,7 +10,7 @@
         </div>
         <div class="carousel-inner rounded-4 shadow">
             <div class="carousel-item active">
-                <img src="https://images.wallpaperscraft.com/image/single/grass_lake_trees_1451427_3840x2160.jpg"
+                <img src="https://i.pinimg.com/736x/f5/84/a0/f584a08589032961d63e3c8a7d436b24.jpg"
                      class="d-block w-100"
                      style="height: 400px; object-fit: cover;"
                      alt="Слайд 1">
@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://img.freepik.com/premium-photo/milky-way-stars-night_10221-23462.jpg?semt=ais_hybrid"
+                <img src="https://i.pinimg.com/736x/93/85/f9/9385f9664ccab38cc670a7717ab7e70a.jpg"
                      class="d-block w-100"
                      style="height: 400px; object-fit: cover;"
                      alt="Слайд 2">
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://img.freepik.com/premium-photo/scenic-view-lake-by-mountains-against-sky_1048944-28909316.jpg?semt=ais_hybrid&w=740"
+                <img src="https://i.pinimg.com/736x/82/f2/03/82f203999d6b54ec1fbe16bcec8bcebb.jpg"
                      class="d-block w-100"
                      style="height: 400px; object-fit: cover;"
                      alt="Слайд 3">

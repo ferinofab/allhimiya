@@ -18,27 +18,13 @@
             font-weight: bold;
             font-size: 1.5rem;
         }
-        .hero-slider {
-            margin-bottom: 2rem;
-        }
+
         .swiper-slide img {
             height: 400px;
             object-fit: cover;
             width: 100%;
         }
-        .product-card {
-            transition: transform 0.3s, box-shadow 0.3s;
-            margin-bottom: 1.5rem;
-        }
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .product-img {
-            height: 200px;
-            object-fit: contain;
-            padding: 1rem;
-        }
+
         .footer {
             margin-top: auto;
             background-color: #f8f9fa;
@@ -89,13 +75,7 @@
         .dropdown-submenu:hover > .dropdown-menu {
             display: block;
         }
-        .dropdown-submenu > a:after {
-            display: block;
-            content: "›";
-            float: right;
-            margin-top: 0;
-            margin-right: 0;
-        }
+
     </style>
 
     @stack('styles')
@@ -130,12 +110,13 @@
                     </a>
                     <ul class="dropdown-menu">
                         @php
-                            $parentCategories = App\Models\Category::whereNull('parent_id')->take(5)->get();
+                            $parentCategories = App\Models\Category::whereNull('parent_id')->get();
                         @endphp
+
                         @foreach($parentCategories as $cat)
                             @if($cat->children->count() > 0)
                                 <li class="dropdown-submenu">
-                                    <a class="dropdown-item dropdown-toggle" href="#">
+                                    <a class="dropdown-item dropdown-toggle" href="{{ route('catalog.category', $cat->slug) }}">
                                         {{ $cat->name }}
                                     </a>
                                     <ul class="dropdown-menu">
@@ -156,9 +137,10 @@
                                 </li>
                             @endif
                         @endforeach
+
                         <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a class="dropdown-item" href="/catalog">
+                            <a class="dropdown-item" href="{{ route('catalog') }}">
                                 <strong>Все категории →</strong>
                             </a>
                         </li>
@@ -209,6 +191,11 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ url('/catalog') }}">
                                         <i class="bi bi-grid-3x3-gap-fill"></i> Каталог товаров
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{route('admin.reviews.index')}}">
+                                        <i class="bi bi-chat-dots-fill"></i> Отзывы
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>

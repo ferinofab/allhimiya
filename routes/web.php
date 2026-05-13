@@ -8,6 +8,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\AdminReviewController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 // Главная и каталог
@@ -62,8 +64,6 @@ Route::middleware('auth')->prefix('profile')->group(function () {
     Route::post('/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
 });
 
-
-// routes/web.php
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', ProductController::class);
 
@@ -76,5 +76,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
-    Route::get('/admin/products/{product}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
-    Route::put('/admin/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
+Route::get('/admin/products/{product}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
+Route::put('/admin/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/product/{product}/reviews', [ReviewController::class, 'show'])->name('product.reviews');
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
+    Route::patch('/reviews/{review}/status', [AdminReviewController::class, 'updateStatus'])->name('reviews.update-status');
+    Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/my-reviews', [ReviewController::class, 'myReviews'])->name('my.reviews');
+});

@@ -109,6 +109,5 @@ class MoySkladService
     public function updateStocs($request, $product)
     {
         $currentStocs = $product->amount;
-
     }
 }

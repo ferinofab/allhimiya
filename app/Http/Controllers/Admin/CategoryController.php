@@ -11,18 +11,18 @@ class CategoryController extends Controller
 {
     public function noCategory()
     {
-        if (!auth()->user()->is_admin) {
+        if (!auth()->user()->is_admin??null) {
             abort(403);
         }
 
         $products = Product::whereNull('category_id')->paginate(20);
-        $categories = Category::all();
+        $categories = Category::whereNotNull('parent_id')->orderBy('name', 'asc')->get();
         return view('admin.no-category', compact('products', 'categories'));
     }
 
     public function withCategory()
     {
-        if (!auth()->user()->is_admin) {
+        if (!auth()->user()->is_admin??null) {
             abort(403);
         }
 
@@ -33,7 +33,7 @@ class CategoryController extends Controller
 
     public function updateCategory(Request $request, $id)
     {
-        if (!auth()->user()->is_admin) {
+        if (!auth()->user()->is_admin??null) {
             abort(403);
         }
 
@@ -44,7 +44,7 @@ class CategoryController extends Controller
 
     public function bulkUpdate(Request $request)
     {
-        if (!auth()->user()->is_admin) {
+        if (!auth()->user()->is_admin??null) {
             abort(403);
         }
 

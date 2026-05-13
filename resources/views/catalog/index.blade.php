@@ -1,8 +1,14 @@
+@php use App\Models\Category; @endphp
 @extends('layouts.app')
 
 @section('title', 'Каталог товаров - Мир Химии')
 
 @section('content')
+    @php
+
+
+
+    @endphp
     <div class="container py-4">
         <!-- Хлебные крошки -->
         <nav aria-label="breadcrumb" class="mb-4">
@@ -53,17 +59,31 @@
                                             Все категории
                                         </label>
                                     </div>
-                                    @foreach($categories as $cat)
+
+                                    @foreach($parentCategories as $cat)
                                         <div class="form-check mb-2">
-                                            <input class="form-check-input" type="radio"
-                                                   name="category" value="{{ $cat->id }}"
-                                                   id="cat_{{ $cat->id }}"
-                                                   {{ request('category') == $cat->id ? 'checked' : '' }}
-                                                   onchange="this.form.submit()">
-                                            <label class="form-check-label" for="cat_{{ $cat->id }}">
-                                                {{ $cat->name }}
-                                                <small class="text-muted">({{ $cat->products->count() }})</small>
-                                            </label>
+
+                                                <p class="text text-primary">{{ $cat->name }}</p>
+
+
+                                            {{-- Дочерние категории --}}
+                                            @if($cat->children->count() > 0)
+                                                <div class="ms-4 mt-2">
+                                                    @foreach($cat->children as $child)
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio"
+                                                                   name="category" value="{{ $child->id }}"
+                                                                   id="cat_{{ $child->id }}"
+                                                                   {{ request('category') == $child->id ? 'checked' : '' }}
+                                                                   onchange="this.form.submit()">
+                                                            <label class="form-check-label" for="cat_{{ $child->id }}">
+                                                                {{ $child->name }}
+                                                                <small class="text-muted">({{ $child->products->count() }})</small>
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>

@@ -16,6 +16,9 @@
                     <a href="{{ route('profile.edit') }}" class="list-group-item list-group-item-action">
                         <i class="bi bi-gear"></i> Настройки
                     </a>
+                    <a href="{{ route('my.reviews') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-chat-square-text"></i> Мои отзывы
+                    </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="list-group-item list-group-item-action text-danger">

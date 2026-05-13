@@ -12,10 +12,6 @@
             opacity: 1;
             transform: scale(1.02);
         }
-        .thumb.border-primary {
-            opacity: 1;
-            transform: scale(0.98);
-        }
     </style>
     <div class="container py-4">
         <!-- Хлебные крошки -->
@@ -270,51 +266,66 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="tab-pane fade" id="reviews" role="tabpanel">
+                            <div class="tab-pane fade show" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                                 <div class="d-flex justify-content-between align-items-center mb-4">
-                                    <h4 class="mb-0">Отзывы покупателей</h4>
+                                    <div>
+                                        <h4 class="mb-0">Отзывы покупателей</h4>
+                                        @if($product->approvedReviews()->count() > 0)
+                                            <div class="mt-2">
+                                                <span class="fw-bold">{{ number_format($product->averageRating(), 1) }}/5</span>
+                                                <span class="text-warning">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        @if($i <= floor($product->averageRating()))
+                                                            <i class="bi bi-star-fill"></i>
+                                                        @elseif($i - 0.5 <= $product->averageRating())
+                                                            <i class="bi bi-star-half"></i>
+                                                        @else
+                                                            <i class="bi bi-star"></i>
+                                                        @endif
+                                                    @endfor
+                                                </span>
+                                                <span class="text-muted ms-2">({{ $product->approvedReviews()->count() }} отзывов)</span>
+                                            </div>
+                                        @endif
+                                    </div>
                                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
                                         <i class="bi bi-pencil"></i> Написать отзыв
                                     </button>
                                 </div>
-                                <div class="mb-4">
-                                    <div class="d-flex gap-3 mb-3 p-3 border rounded">
-                                        <div class="flex-shrink-0">
-                                            <i class="bi bi-person-circle fs-1 text-secondary"></i>
-                                        </div>
-                                        <div>
-                                            <strong>Анна С.</strong>
-                                            <div class="mb-1">
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star-fill text-warning"></i>
+
+                                <div class="reviews-list">
+                                    @forelse($product->approvedReviews()->with('user')->latest()->get() as $review)
+                                        <div class="d-flex gap-3 mb-3 p-3 border rounded">
+                                            <div class="flex-shrink-0">
+                                                <i class="bi bi-person-circle fs-1 text-secondary"></i>
                                             </div>
-                                            <p>Отличный товар! Пользуюсь уже год, всем рекомендую. Быстрая доставка, качество на высоте.</p>
-                                            <small class="text-muted">2 дня назад</small>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex gap-3 p-3 border rounded">
-                                        <div class="flex-shrink-0">
-                                            <i class="bi bi-person-circle fs-1 text-secondary"></i>
-                                        </div>
-                                        <div>
-                                            <strong>Михаил К.</strong>
-                                            <div class="mb-1">
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star-fill text-warning"></i>
-                                                <i class="bi bi-star text-warning"></i>
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <strong>{{ $review->user->name }}</strong>
+                                                        <div class="mb-1">
+                                                            @for($i = 1; $i <= 5; $i++)
+                                                                @if($i <= $review->rating)
+                                                                    <i class="bi bi-star-fill text-warning"></i>
+                                                                @else
+                                                                    <i class="bi bi-star text-warning"></i>
+                                                                @endif
+                                                            @endfor
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted">{{ $review->created_at->diffForHumans() }}</small>
+                                                </div>
+                                                <p class="mt-2 mb-0">{{ $review->comment }}</p>
                                             </div>
-                                            <p>Хороший товар, соответствует описанию. Цена немного завышена, но качество отличное.</p>
-                                            <small class="text-muted">1 неделя назад</small>
                                         </div>
-                                    </div>
+                                    @empty
+                                        <div class="text-center p-5 border rounded bg-light">
+                                            <i class="bi bi-chat-square-text fs-1 text-muted"></i>
+                                            <p class="mt-3 mb-0">Пока нет отзывов. Будьте первым, кто оставит отзыв!</p>
+                                        </div>
+                                    @endforelse
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -348,34 +359,49 @@
     </div>
 
     <!-- Модальное окно для отзыва -->
-    <div class="modal fade" id="reviewModal" tabindex="-1">
+    <!-- Modal -->
+    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Написать отзыв</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <form>
+                <form action="{{ route('reviews.store') }}" method="POST" id="reviewForm">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reviewModalLabel">Написать отзыв</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+
                     <div class="modal-body">
+                        {{-- Оценка --}}
                         <div class="mb-3">
-                            <label class="form-label">Оценка</label>
+                            <label class="form-label fw-bold">Оценка <span class="text-danger">*</span></label>
                             <div class="rating">
-                                <i class="bi bi-star fs-3" data-rating="1"></i>
-                                <i class="bi bi-star fs-3" data-rating="2"></i>
-                                <i class="bi bi-star fs-3" data-rating="3"></i>
-                                <i class="bi bi-star fs-3" data-rating="4"></i>
-                                <i class="bi bi-star fs-3" data-rating="5"></i>
+                                <i class="bi bi-star fs-3" data-rating="1" style="cursor: pointer;"></i>
+                                <i class="bi bi-star fs-3" data-rating="2" style="cursor: pointer;"></i>
+                                <i class="bi bi-star fs-3" data-rating="3" style="cursor: pointer;"></i>
+                                <i class="bi bi-star fs-3" data-rating="4" style="cursor: pointer;"></i>
+                                <i class="bi bi-star fs-3" data-rating="5" style="cursor: pointer;"></i>
                             </div>
+                            <input type="hidden" name="rating" id="ratingValue" required>
+                            <div class="invalid-feedback" id="ratingError">Пожалуйста, выберите оценку</div>
                         </div>
+
+                        {{-- Имя пользователя (автоматически из Auth) --}}
                         <div class="mb-3">
-                            <label class="form-label">Ваше имя</label>
-                            <input type="text" class="form-control" required>
+                            <label class="form-label fw-bold">Ваше имя</label>
+                            <input type="text" class="form-control" value="{{ Auth::user()->name }}" disabled>
+                            <small class="text-muted">Имя берется автоматически из вашего аккаунта</small>
                         </div>
+
+                        {{-- Текст отзыва --}}
                         <div class="mb-3">
-                            <label class="form-label">Ваш отзыв</label>
-                            <textarea class="form-control" rows="4" required></textarea>
+                            <label class="form-label fw-bold">Ваш отзыв <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="comment" rows="4" required placeholder="Поделитесь своим опытом использования товара..."></textarea>
+                            <div class="invalid-feedback" id="commentError">Пожалуйста, напишите текст отзыва (минимум 3 символа)</div>
                         </div>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                         <button type="submit" class="btn btn-primary">Отправить</button>
@@ -499,17 +525,13 @@
         document.querySelectorAll('.rating i').forEach(star => {
             star.addEventListener('click', function() {
                 const rating = this.dataset.rating;
+                document.getElementById('ratingValue').value = rating;
                 document.querySelectorAll('.rating i').forEach((s, i) => {
-                    if (i < rating) {
-                        s.classList.remove('bi-star');
-                        s.classList.add('bi-star-fill', 'text-warning');
-                    } else {
-                        s.classList.remove('bi-star-fill', 'text-warning');
-                        s.classList.add('bi-star');
-                    }
+                    s.className = i < rating ? 'bi bi-star-fill text-warning fs-3' : 'bi bi-star fs-3';
                 });
             });
         });
+
     </script>
     <script>
         function changeMainImage(src, element) {
