@@ -58,7 +58,7 @@ class ProductController extends Controller
                 $query->latest();
         }
 
-        $products = $query   ->whereNotNull('category_id')
+        $products = $query->whereNotNull('category_id')
             ->paginate(12)
             ->withQueryString();
         $selectedCategory = $request->category;
