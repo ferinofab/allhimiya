@@ -137,9 +137,7 @@
                                         </div>
                                     @else
                                         {{-- Кнопка для пользователя --}}
-                                        <button class="btn btn-primary add-to-cart" data-id="{{ $product->id }}">
-                                            <i class="bi bi-cart-plus"></i> В корзину
-                                        </button>
+                                            <a href="{{ route('product', $product->id) }}" class="btn btn-primary">Подробнее</a>
                                     @endif
                                 @else
                                     {{-- Кнопка "Нет в наличии" (disabled) --}}

@@ -96,8 +96,6 @@ class ProductController extends Controller
     {
         $product = Product::with(['category', 'images'])->findOrFail($id);
 
-
-
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $id)
             ->limit(4)
