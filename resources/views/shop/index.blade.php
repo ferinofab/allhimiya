@@ -2,7 +2,8 @@
 
 @section('content')
     <!-- Слайдер -->
-    <div id="mainSlider" class="carousel slide mx-auto mb-5" data-bs-ride="carousel" style="max-width: 80%; margin-top: 30px;">
+    <div id="mainSlider" class="carousel slide mx-auto mb-5" data-bs-ride="carousel"
+         style="max-width: 80%; margin-top: 30px;">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="0" class="active"></button>
             <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="1"></button>
@@ -54,8 +55,10 @@
             <h2 class="mb-3">О компании</h2>
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <p class="lead">Мир Химии - интернет-магазин автомобильной химии и средств для ухода за автомобилем.</p>
-                    <p>Мы предлагаем только качественные товары от проверенных производителей. Наша миссия - сделать уход за автомобилем простым и доступным для каждого автовладельца.</p>
+                    <p class="lead">Мир Химии - интернет-магазин автомобильной химии и средств для ухода за
+                        автомобилем.</p>
+                    <p>Мы предлагаем только качественные товары от проверенных производителей. Наша миссия - сделать
+                        уход за автомобилем простым и доступным для каждого автовладельца.</p>
                 </div>
             </div>
         </div>
@@ -68,24 +71,83 @@
         </div>
         <div class="row justify-content-center">
             @foreach($newProducts as $product)
-                <div class="col-md-4 mb-4 d-flex justify-content-center">
-                    <div class="card product-card" style="width: 100%; max-width: 320px;">
-                        <div class="p-3 text-center bg-light">
-                        {{-- Главное изображение --}}
+                <div class="col-md-6 col-lg-4 mb-4 d-flex justify-content-center">
+                    <div class="card product-card h-100 shadow-sm border-0" style="width: 100%; max-width: 320px;">
+                        <div class="position-relative overflow-hidden"
+                             style="height: 200px; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa;">
+                            {{-- Затемнение при отсутствии товара --}}
+                            @if($product->amount <= 0)
+                                <div
+                                    class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex align-items-center justify-content-center"
+                                    style="z-index: 2;">
+                                    <span class="badge bg-danger fs-6 px-3 py-2">Нет в наличии</span>
+                                </div>
+                            @endif
+
+                            {{-- Бейдж скидки (если нужно) --}}
+                            @if($product->price < 500)
+                                <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2"
+                                      style="z-index: 1;">
+                            <i class="bi bi-tag"></i> Скидка
+                        </span>
+                            @endif
+
+                            {{-- Изображение товара --}}
                             <img src="{{ asset($product->main_image_url ??
-                                $product->images->first()?->image_path ??
-                                $product->image_url ??
-                               '/storage/products/495057.svg') }}"
-                                 id="mainImage"
+                        $product->images->first()?->image_path ??
+                        $product->image_url ??
+                        '/storage/products/495057.svg') }}"
                                  class="img-fluid rounded"
-                                 style="max-height: 400px; width: auto; object-fit: contain;"
+                                 style="max-height: 150px; height: auto; width: auto; max-width: 90%; object-fit: contain;"
                                  alt="{{ $product->name }}">
                         </div>
 
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ Str::limit($product->name, 40) }}</h5>
-                            <p class="card-text fw-bold text-primary">{{ number_format($product->price, 2) }} ₽</p>
-                            <a href="{{ route('product', $product->id) }}" class="btn btn-primary">Подробнее</a>
+                        <div class="card-body text-center d-flex flex-column">
+                            <h6 class="card-title fw-bold">
+                                <a href="{{ route('product', $product->id) }}" class="text-decoration-none text-dark">
+                                    {{ Str::limit($product->name, 50) }}
+                                </a>
+                            </h6>
+                            <p class="text-muted small mb-2">
+                                {{ $product->category->name ?? 'Без категории' }}
+                            </p>
+                            <div class="mb-3">
+                                @if($product->price < 500)
+                                    <span class="text-decoration-line-through text-muted me-2">
+                                {{ number_format($product->price * 1.2, 2) }} ₽
+                            </span>
+                                    <span class="fs-5 fw-bold text-danger">
+                                {{ number_format($product->price, 2) }} ₽
+                            </span>
+                                @else
+                                    <span class="fs-5 fw-bold text-primary">
+                                {{ number_format($product->price, 2) }} ₽
+                            </span>
+                                @endif
+                            </div>
+                            <div class="d-grid mt-auto">
+                                @if($product->amount > 0)
+                                    @if(Auth::user()->is_admin ?? false)
+                                        {{-- Кнопки для админа --}}
+                                        <div class="d-flex gap-2 mb-2">
+                                            <a href="/admin/products/{{ $product->id }}/edit"
+                                               class="btn btn-primary btn-sm flex-grow-1">✏️ Изменить</a>
+                                            <a href="/admin/products/{{ $product->id }}/images"
+                                               class="btn btn-secondary btn-sm flex-grow-1">🖼️ Фото</a>
+                                        </div>
+                                    @else
+                                        {{-- Кнопка для пользователя --}}
+                                        <button class="btn btn-primary add-to-cart" data-id="{{ $product->id }}">
+                                            <i class="bi bi-cart-plus"></i> В корзину
+                                        </button>
+                                    @endif
+                                @else
+                                    {{-- Кнопка "Нет в наличии" (disabled) --}}
+                                    <button class="btn btn-secondary" disabled>
+                                        <i class="bi bi-x-circle"></i> Нет в наличии
+                                    </button>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>

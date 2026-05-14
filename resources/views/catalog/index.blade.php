@@ -2,13 +2,72 @@
 @extends('layouts.app')
 
 @section('title', 'Каталог товаров - Мир Химии')
+<style>
+    /* resources/css/app.css */
 
+    /* Стили для фонового изображения */
+    .product-image-bg {
+        height: 260px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-top-left-radius: calc(0.375rem - 1px);
+        border-top-right-radius: calc(0.375rem - 1px);
+        transition: transform 0.3s ease;
+    }
+
+    /* Эффект увеличения при наведении на карточку */
+    .product-card:hover .product-image-bg {
+        transform: scale(1.02);
+    }
+
+    /* Плавный переход для карточки */
+    .product-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        overflow: hidden;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Заголовок товара */
+    .product-title {
+        min-height: 48px;
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    /* Затемнение для отсутствующего товара */
+    .product-overlay {
+        border-radius: inherit;
+    }
+
+    /* Адаптив для мобильных устройств */
+    @media (max-width: 768px) {
+        .product-image-bg {
+            height: 200px;
+        }
+
+        .product-title {
+            min-height: auto;
+            font-size: 0.85rem;
+        }
+
+        .product-card {
+            max-width: 100% !important;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .product-image-bg {
+            height: 180px;
+        }
+    }
+</style>
 @section('content')
-    @php
 
-
-
-    @endphp
     <div class="container py-4">
         <!-- Хлебные крошки -->
         <nav aria-label="breadcrumb" class="mb-4">
@@ -63,7 +122,7 @@
                                     @foreach($parentCategories as $cat)
                                         <div class="form-check mb-2">
 
-                                                <p class="text text-primary">{{ $cat->name }}</p>
+                                            <p class="text text-primary">{{ $cat->name }}</p>
 
 
                                             {{-- Дочерние категории --}}
@@ -78,7 +137,9 @@
                                                                    onchange="this.form.submit()">
                                                             <label class="form-check-label" for="cat_{{ $child->id }}">
                                                                 {{ $child->name }}
-                                                                <small class="text-muted">({{ $child->products->count() }})</small>
+                                                                <small
+                                                                    class="text-muted">({{ $child->products->count() }}
+                                                                    )</small>
                                                             </label>
                                                         </div>
                                                     @endforeach
@@ -154,9 +215,15 @@
                     <div class="mt-2 mt-sm-0">
                         <select class="form-select" id="sortSelect" style="min-width: 200px;">
                             <option value="" {{ !request('sort') ? 'selected' : '' }}>Сортировка</option>
-                            <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Цена: по возрастанию</option>
-                            <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Цена: по убыванию</option>
-                            <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Название: А-Я</option>
+                            <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Цена: по
+                                возрастанию
+                            </option>
+                            <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Цена: по
+                                убыванию
+                            </option>
+                            <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Название:
+                                А-Я
+                            </option>
                             <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Новинки</option>
                         </select>
                     </div>
@@ -165,76 +232,76 @@
                 <!-- Товары -->
                 @if($products->count() > 0)
                     <div class="row g-4">
-                        @foreach($products as $product)
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card product-card h-100 shadow-sm border-0">
-                                    <div class="position-relative overflow-hidden">
-                                        @if($product->amount <= 0)
-                                            <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex align-items-center justify-content-center">
-                                                <span class="badge bg-danger fs-6 px-3 py-2">Нет в наличии</span>
-                                            </div>
-                                        @endif
-                                        @if($product->price < 500)
-                                            <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2">
-                                            <i class="bi bi-tag"></i> Скидка
-                                        </span>
-                                        @endif
-                                            <img src="{{ asset($product->main_image_url ??
-                                                $product->images->first()?->image_path ??
-                                                $product->image_url ??
-                                                '/storage/products/495057.svg') }}"
-                                                 id="mainImage"
-                                                 class="img-fluid rounded"
-                                                 style="max-height: 400px; width: auto; object-fit: contain;"
-                                                 alt="{{ $product->name }}">
-                                    </div>
-                                    <div class="card-body text-center">
-                                        <h6 class="card-title fw-bold">
-                                            <a href="{{ route('product', $product->id) }}" class="text-decoration-none text-dark">
-                                                {{ Str::limit($product->name, 50) }}
-                                            </a>
-                                        </h6>
-                                        <p class="text-muted small mb-2">
-                                            {{ $product->category->name ?? 'Без категории' }}
-                                        </p>
-                                        <div class="mb-3">
+                        <div class="row justify-content-center">
+                            @foreach($products as $product)
+                                <div class="col-md-6 col-lg-4 mb-4 d-flex align-items-stretch">
+                                    <div class="card product-card h-100 shadow-sm border-0 w-100" style="max-width: 380px; margin: 0 auto;">
+                                        {{-- Верхняя часть с изображением как фон --}}
+                                        <div class="position-relative product-image-bg"
+                                             style="background-image: url('{{ asset($product->main_image_url ??
+                         $product->images->first()?->image_path ??
+                         $product->image_url ??
+                         '/storage/products/495057.svg') }}');">
+
+                                            @if($product->amount <= 0)
+                                                <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex align-items-center justify-content-center product-overlay">
+                                                    <span class="badge bg-danger fs-6 px-3 py-2">Нет в наличии</span>
+                                                </div>
+                                            @endif
+
                                             @if($product->price < 500)
-                                                <span class="text-decoration-line-through text-muted me-2">
-                                                {{ number_format($product->price * 1.2, 2) }} ₽
-                                            </span>
-                                                <span class="fs-5 fw-bold text-danger">
-                                                {{ number_format($product->price, 2) }} ₽
-                                            </span>
-                                            @else
-                                                <span class="fs-5 fw-bold text-primary">
-                                                {{ number_format($product->price, 2) }} ₽
-                                            </span>
+                                                <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2 discount-badge">
+                            <i class="bi bi-tag"></i> Скидка
+                        </span>
                                             @endif
                                         </div>
-                                        <div class="d-grid">
-                                            @if($product->amount > 0)
-                                                @if(Auth::user()->is_admin??null)
-                                                    {{-- Кнопки для админа --}}
-                                                    <div class="container mb-2">
-                                                        <a href="/admin/products/{{ $product->id }}/edit" class="btn btn-primary">✏️ Изменить</a>
-                                                        <a href="/admin/products/{{ $product->id }}/images" class="btn btn-secondary">🖼️ Фото</a>
-                                                    </div>
+
+                                        <div class="card-body text-center d-flex flex-column">
+                                            <h6 class="card-title fw-bold product-title">
+                                                <a href="{{ route('product', $product->id) }}" class="text-decoration-none text-dark">
+                                                    {{ Str::limit($product->name, 50) }}
+                                                </a>
+                                            </h6>
+                                            <p class="text-muted small mb-2">
+                                                {{ $product->category->name ?? 'Без категории' }}
+                                            </p>
+                                            <div class="mb-3">
+                                                @if($product->price < 500)
+                                                    <span class="text-decoration-line-through text-muted me-2">
+                                {{ number_format($product->price * 1.2, 2) }} ₽
+                            </span>
+                                                    <span class="fs-5 fw-bold text-danger">
+                                {{ number_format($product->price, 2) }} ₽
+                            </span>
                                                 @else
-                                                    {{-- Кнопка для пользователя --}}
-                                                    <button class="btn btn-primary add-to-cart" data-id="{{ $product->id }}">
-                                                        <i class="bi bi-cart-plus"></i> В корзину
+                                                    <span class="fs-5 fw-bold text-primary">
+                                {{ number_format($product->price, 2) }} ₽
+                            </span>
+                                                @endif
+                                            </div>
+                                            <div class="d-grid mt-auto">
+                                                @if($product->amount > 0)
+                                                    @if(Auth::user()->is_admin ?? false)
+                                                        <div class="d-flex gap-2">
+                                                            <a href="/admin/products/{{ $product->id }}/edit" class="btn btn-primary btn-sm flex-grow-1">✏️ Изменить</a>
+                                                            <a href="/admin/products/{{ $product->id }}/images" class="btn btn-secondary btn-sm flex-grow-1">🖼️ Фото</a>
+                                                        </div>
+                                                    @else
+                                                        <button class="btn btn-primary add-to-cart" data-id="{{ $product->id }}">
+                                                            <i class="bi bi-cart-plus"></i> В корзину
+                                                        </button>
+                                                    @endif
+                                                @else
+                                                    <button class="btn btn-secondary" disabled>
+                                                        <i class="bi bi-x-circle"></i> Нет в наличии
                                                     </button>
                                                 @endif
-                                            @else
-                                                <button class="btn btn-secondary" disabled>
-                                                    <i class="bi bi-x-circle"></i> Нет в наличии
-                                                </button>
-                                            @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
 
                     <!-- Пагинация -->
@@ -258,14 +325,14 @@
 
 @push('scripts')
     <script>
-        document.getElementById('sortSelect')?.addEventListener('change', function() {
+        document.getElementById('sortSelect')?.addEventListener('change', function () {
             const url = new URL(window.location.href);
             url.searchParams.set('sort', this.value);
             window.location.href = url.toString();
         });
 
         document.querySelectorAll('.add-to-cart').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 const productId = this.dataset.id;
                 fetch(`/cart/add-ajax/${productId}`, {
                     method: 'POST',
@@ -274,7 +341,7 @@
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify({ quantity: 1 })
+                    body: JSON.stringify({quantity: 1})
                 })
                     .then(response => response.json())
                     .then(data => {

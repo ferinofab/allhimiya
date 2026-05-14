@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -7,7 +8,7 @@
     <title>@yield('title', 'Мир Химии - Интернет магазин автомобильной химии')</title>
 
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <!-- Swiper CSS -->
@@ -55,14 +56,7 @@
             padding: 0 4px;
             box-shadow: 0 0 0 1px white;
         }
-        .category-card {
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .category-card:hover {
-            background-color: #0d6efd;
-            color: white;
-        }
+
         .dropdown-submenu {
             position: relative;
         }
@@ -146,6 +140,35 @@
                         </li>
                     </ul>
                 </li>
+
+                {{-- НОВЫЙ ВЫПАДАЮЩИЙ СПИСОК "СПРАВОЧНИК" --}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-book"></i> Справочник
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('about') }}">
+                                <i class="bi bi-info-circle me-2"></i> О компании
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('delivery') }}">
+                                <i class="bi bi-truck me-2"></i> Доставка и оплата
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('return') }}">
+                                <i class="bi bi-arrow-return-left me-2"></i> Возврат товара
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('contacts') }}">
+                                <i class="bi bi-envelope me-2"></i> Контакты
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
 
             <form class="d-flex me-3" action="{{ route('catalog') }}" method="GET">
@@ -172,7 +195,7 @@
                 </li>
 
                 @auth
-                    @if(Auth::user()->is_admin)
+                    @if(Auth::user()->is_admin??null)
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="bi bi-shield-lock"></i> Админ
@@ -213,7 +236,7 @@
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle"></i> {{ Auth::user()->name }}
+                            <i class="bi bi-person-circle"></i> {{ Auth::user()->name??null }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
@@ -285,10 +308,10 @@
             <div class="col-md-2 mb-3">
                 <h6>Информация</h6>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-decoration-none text-muted">О компании</a></li>
-                    <li><a href="#" class="text-decoration-none text-muted">Доставка и оплата</a></li>
-                    <li><a href="#" class="text-decoration-none text-muted">Возврат товара</a></li>
-                    <li><a href="#" class="text-decoration-none text-muted">Контакты</a></li>
+                    <li><a href="{{ route('about') }}" class="text-decoration-none text-muted">О компании</a></li>
+                    <li><a href="{{ route('delivery') }}" class="text-decoration-none text-muted">Доставка и оплата</a></li>
+                    <li><a href="{{ route('return') }}" class="text-decoration-none text-muted">Возврат товара</a></li>
+                    <li><a href="{{ route('contacts') }}" class="text-decoration-none text-muted">Контакты</a></li>
                 </ul>
             </div>
             <div class="col-md-2 mb-3">
@@ -307,14 +330,14 @@
                 <h6>Контакты</h6>
                 <ul class="list-unstyled text-muted">
                     <li><i class="bi bi-telephone"></i> 8 (800) 123-45-67</li>
-                    <li><i class="bi bi-envelope"></i> info@mirhimii.ru</li>
+                    <li><i class="bi bi-envelope"></i> info_mirhimii@gmail.com</li>
                     <li><i class="bi bi-clock"></i> Пн-Пт: 9:00 - 20:00</li>
                 </ul>
             </div>
         </div>
         <hr>
         <div class="text-center text-muted">
-            <small>&copy; 2024 Мир Химии. Все права защищены.</small>
+            <small>&copy; 2026 Мир Химии. Все права защищены.</small>
         </div>
     </div>
 </footer>

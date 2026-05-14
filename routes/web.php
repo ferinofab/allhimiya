@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\ReviewController;
@@ -92,3 +93,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 Route::middleware(['auth'])->group(function () {
     Route::get('/my-reviews', [ReviewController::class, 'myReviews'])->name('my.reviews');
 });
+
+
+
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/delivery', [PageController::class, 'delivery'])->name('delivery');
+Route::get('/return', [PageController::class, 'return'])->name('return');
+Route::get('/contacts', [PageController::class, 'contacts'])->name('contacts');
+Route::post('/contact/send', [PageController::class, 'sendContact'])->name('contact.send');
