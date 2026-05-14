@@ -14,7 +14,6 @@ class ProductImagesSeeder extends Seeder
      */
     public function run(): void
     {
-        // Данные из product_images.sql
         $images = [
             // product_id, image_path, is_main
             [1, '/storage/products/1/JifHbuJuDJFLz6zmcHhtzm59LTvbRxyOhxMBbZrD.webp', 1],
@@ -25,6 +24,7 @@ class ProductImagesSeeder extends Seeder
             [8, '/storage/products/8/vZJGesmkdQ1NWxhFLLD5YZjdvsnvRmu5X5lvwpHU.jpg', 1],
             [10, '/storage/products/10/Og7PFSdOGOGKdlR6ah8YTrc1f6Vbce2caUtphBgK.jpg', 1],
             [7, '/storage/products/7/eylHaQZFc9ja6vEWCUnYA4c2xalUs59riC34nszd.jpg', 1],
+            [7, '/storage/products/7/eylHaQZFc9ja6vEWCUnYA4c2xalUsdss59riC34nszd.jpg', 0],
         ];
 
         foreach ($images as $imageData) {
@@ -46,8 +46,6 @@ class ProductImagesSeeder extends Seeder
                         'updated_at' => now(),
                     ]
                 );
-
-                $this->command->info("Добавлено изображение для товара ID: {$productId}");
             } else {
                 $this->command->warn("Товар с ID {$productId} не найден, изображение пропущено");
             }

@@ -390,7 +390,7 @@
                         {{-- Имя пользователя (автоматически из Auth) --}}
                         <div class="mb-3">
                             <label class="form-label fw-bold">Ваше имя</label>
-                            <input type="text" class="form-control" value="{{ Auth::user()->name }}" disabled>
+                            <input type="text" class="form-control" value="{{ Auth::user()->name??null }}" disabled>
                             <small class="text-muted">Имя берется автоматически из вашего аккаунта</small>
                         </div>
 
