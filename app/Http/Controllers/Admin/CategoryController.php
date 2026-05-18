@@ -54,6 +54,7 @@ class CategoryController extends Controller
         ]);
 
         Product::whereIn('id', $request->product_ids)->update(['category_id' => $request->category_id]);
+
         return back()->with('success', 'Категории назначены');
     }
 }

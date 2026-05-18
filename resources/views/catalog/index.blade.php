@@ -232,13 +232,13 @@
                 <!-- Товары -->
                 @if($products->count() > 0)
                     <div class="row g-4">
-                        <div class="row justify-content-center">
+                        <div class="row">
                             @foreach($products as $product)
                                 <div class="col-md-6 col-lg-4 mb-4 d-flex align-items-stretch">
                                     <div class="card product-card h-100 shadow-sm border-0 w-100" style="max-width: 380px; margin: 0 auto;">
                                         {{-- Верхняя часть с изображением как фон --}}
                                         <div class="position-relative product-image-bg"
-                                             style="background-image: url('{{ asset($product->main_image_url ??
+                                             style="background-image: url('{{ asset($product->mainImage->image_path ??
                          $product->images->first()?->image_path ??
                          $product->image_url ??
                          '/storage/products/495057.svg') }}');">

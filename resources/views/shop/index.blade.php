@@ -93,7 +93,7 @@
                             @endif
 
                             {{-- Изображение товара --}}
-                            <img src="{{ asset($product->main_image_url ??
+                            <img src="{{ asset($product->mainImage->image_path ??
                         $product->images->first()?->image_path ??
                         $product->image_url ??
                         '/storage/products/495057.svg') }}"

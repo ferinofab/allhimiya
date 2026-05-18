@@ -36,7 +36,7 @@
                 <div class="card shadow-sm border-0 overflow-hidden">
                     <div class="p-3 text-center bg-light">
                         {{-- Главное изображение --}}
-                        <img src="{{ asset($product->main_image_url ??
+                        <img src="{{ asset($product->mainImage->image_path ??
                             $product->images->first()?->image_path ??
                             $product->image_url ??
                             'https://placehold.co/600x500/e9ecef/495057?text=' . urlencode($product->name)) }}"
@@ -52,7 +52,8 @@
                             @foreach($product->images as $image)
                                 <div class="col-3">
                                     <img src="{{ $image->image_path }}"
-                                         class="img-fluid rounded border p-1 thumb {{ $image->is_main ? 'border-primary border-2' : '' }}"
+{{--                                    {{ $image->is_main ? 'border-primary border-2' : ''--}}
+                                    class="img-fluid rounded border p-1 thumb  }}"
                                          style="height: 80px; width: 100%; object-fit: cover; cursor: pointer;"
                                          alt="{{ $product->name }}"
                                          onclick="changeMainImage('{{ $image->image_path }}', this)">
