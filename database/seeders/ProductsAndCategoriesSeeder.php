@@ -109,13 +109,13 @@ class ProductsAndCategoriesSeeder extends Seeder
             ['id' => 1, 'sku' => '63256355', 'name' => 'Shine Systems RO Foam Pad Green - полировальный круг твердый зеленый, 155 мм', 'amount' => 13, 'price' => 990, 'category_id' => 11],
             ['id' => 2, 'sku' => '00301', 'name' => 'Shine Systems Detailing Brush N10 - деликатная кисть для детейлинга средняя', 'amount' => 193, 'price' => 190, 'category_id' => 31],
             ['id' => 3, 'sku' => '00285', 'name' => 'SGCB Foam Pad set 3.2" Набор мини кружков для полировки 82 мм (4 шт)', 'amount' => 0, 'price' => 817, 'category_id' => 13],
-            ['id' => 6, 'sku' => '63256214', 'name' => 'Shine Systems BL InteriorDetailer Macadamia - средство для ухода за интерьером, 5 л', 'amount' => 12, 'price' => 1990, 'category_id' => 18],
-            ['id' => 7, 'sku' => '9900069172', 'name' => 'One Q2 Light (50 ml) кварцевое защитное покрытие (серия "Энтузиаст"), GYEON', 'amount' => 2, 'price' => 7190, 'category_id' => 22],
-            ['id' => 8, 'sku' => '6554254', 'name' => 'SONAX ProfiLine Leather Care - Лосьон для кожи, 1л', 'amount' => 0, 'price' => 3067, 'category_id' => 19],
-            ['id' => 9, 'sku' => '63255918', 'name' => 'Пистолет для пеногенератора 75 см (пласт. ручка)', 'amount' => 70, 'price' => 1990, 'category_id' => 37],
-            ['id' => 10, 'sku' => '63256091', 'name' => 'Керамическое покрытие Artdeshine BX Coating 1 мл', 'amount' => 0, 'price' => 1590, 'category_id' => 21],
-            ['id' => 11, 'sku' => '00345', 'name' => 'Shine Systems Coating Sponge - Аппликатор с прорезью для керамики 8,5*4,5*2,5 см', 'amount' => 2, 'price' => 90, 'category_id' => 38],
-            ['id' => 12, 'sku' => '63255647', 'name' => 'ZviZZer Полировальный круг белый шерстяной 165/15/165 мм (ворс 5мм)', 'amount' => 0, 'price' => 1546, 'category_id' => 14],
+            ['id' => 4, 'sku' => '63256214', 'name' => 'Shine Systems BL InteriorDetailer Macadamia - средство для ухода за интерьером, 5 л', 'amount' => 12, 'price' => 1990, 'category_id' => 18],
+            ['id' => 5, 'sku' => '9900069172', 'name' => 'One Q2 Light (50 ml) кварцевое защитное покрытие (серия "Энтузиаст"), GYEON', 'amount' => 2, 'price' => 7190, 'category_id' => 22],
+            ['id' => 6, 'sku' => '6554254', 'name' => 'SONAX ProfiLine Leather Care - Лосьон для кожи, 1л', 'amount' => 0, 'price' => 3067, 'category_id' => 19],
+            ['id' => 7, 'sku' => '63255918', 'name' => 'Пистолет для пеногенератора 75 см (пласт. ручка)', 'amount' => 70, 'price' => 1990, 'category_id' => 37],
+            ['id' => 8, 'sku' => '63256091', 'name' => 'Керамическое покрытие Artdeshine BX Coating 1 мл', 'amount' => 0, 'price' => 1590, 'category_id' => 21],
+            ['id' => 9, 'sku' => '00345', 'name' => 'Shine Systems Coating Sponge - Аппликатор с прорезью для керамики 8,5*4,5*2,5 см', 'amount' => 2, 'price' => 90, 'category_id' => 38],
+            ['id' => 10, 'sku' => '63255647', 'name' => 'ZviZZer Полировальный круг белый шерстяной 165/15/165 мм (ворс 5мм)', 'amount' => 0, 'price' => 1546, 'category_id' => 14],
         ];
 
         // Вставка товаров

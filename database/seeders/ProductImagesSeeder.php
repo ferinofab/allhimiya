@@ -16,15 +16,15 @@ class ProductImagesSeeder extends Seeder
     {
         $images = [
             // product_id, image_path, is_main
-            [1, '/storage/products/1/JifHbuJuDJFLz6zmcHhtzm59LTvbRxyOhxMBbZrD.webp', 1],
-            [1, '/storage/products/1/BN7CW7cp02YUbbkpMmOkvfEawCy5qabhKxTxVjYj.png', 0],
-            [67, '/storage/products/67/5JxEiDYeOqnKmb7KoaTXuxlHObErOGsi4LDjVwRm.jpg', 1],
-            [12, '/storage/products/12/vbGAfFpalnsF1rMtV8qBkuJ0vLUP8jdnOLx3mn3k.jpg', 1],
+            [1, '/storage/products/1/54248279a71d409ec9c7433166b3ca18.jpg', 1],
+            [2, '/storage/products/2/5132ea6814d27c165ebcf7e0eb401737.jpg', 1],
+            [2, '/storage/products/2/953ffa5a051986d579020c28db80f61b.jpg', 0],
+            [3, '/storage/products/3/39a20914debdad3335b6e67240c47ed2.jpg', 1],
             [6, '/storage/products/6/0LZVx7cZ4oc7skgGJZOpsHZ3tUhS1XTNOCmsoGSK.jpg', 1],
-            [8, '/storage/products/8/vZJGesmkdQ1NWxhFLLD5YZjdvsnvRmu5X5lvwpHU.jpg', 1],
             [10, '/storage/products/10/Og7PFSdOGOGKdlR6ah8YTrc1f6Vbce2caUtphBgK.jpg', 1],
             [7, '/storage/products/7/eylHaQZFc9ja6vEWCUnYA4c2xalUs59riC34nszd.jpg', 1],
-            [7, '/storage/products/7/eylHaQZFc9ja6vEWCUnYA4c2xalUsdss59riC34nszd.jpg', 0],
+            [8, '/storage/products/8/vZJGesmkdQ1NWxhFLLD5YZjdvsnvRmu5X5lvwpHU.jpg', 1],
+
         ];
 
         foreach ($images as $imageData) {
