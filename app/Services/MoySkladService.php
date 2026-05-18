@@ -63,47 +63,63 @@ class MoySkladService
 
     public function syncStocks()
     {
-        $response = Http::withHeaders([
-            'Authorization' => 'Basic ' . base64_encode($this->login . ':' . $this->password),
-            'Accept-Encoding' => 'gzip',
-        ])->withOptions([
-            'verify' => false,
-            'decode_content' => true,
-        ])->get($this->apiUrl . 'report/stock/bystore', [
-            'limit' => 100,
-        ]);
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Basic ' . base64_encode($this->login . ':' . $this->password),
+                'Accept-Encoding' => 'gzip',
+            ])->withOptions([
+                'verify' => false,
+                'decode_content' => true,
+            ])->get($this->apiUrl . 'report/stock/all', [
+                'limit' => 1000,
+            ]);
 
-        if (!$response->successful()) {
-            Log::error('MoySklad API error: ' . $response->status());
-            // --- НОВАЯ ОТЛАДКА ---
-            Log::error('MoySklad API Response Body: ' . $response->body());
-            // ---------------------
+            if (!$response->successful()) {
+                Log::error('MoySklad API error: ' . $response->status() . ' - ' . $response->body());
+                return 0;
+            }
+
+            $rows = $response->json()['rows'] ?? [];
+
+            if (empty($rows)) {
+                return 0;
+            }
+
+            // Подготавливаем данные для массового обновления
+            $stockData = [];
+            foreach ($rows as $row) {
+                $href = $row['meta']['href'] ?? '';
+                if (!$href) continue;
+
+                $moyskladId = basename(parse_url($href, PHP_URL_PATH));
+                $stock = $row['stock'] ?? 0;
+
+                $stockData[$moyskladId] = $stock;
+            }
+
+            // Получаем все товары из БД одним запросом
+            $products = Product::whereIn('moysklad_id', array_keys($stockData))
+                ->get(['id', 'moysklad_id', 'amount'])
+                ->keyBy('moysklad_id');
+
+            $updatedCount = 0;
+            foreach ($stockData as $moyskladId => $newStock) {
+                $product = $products->get($moyskladId);
+
+                // Обновляем только если есть изменения
+                if ($product && $product->amount != $newStock) {
+                    $product->update(['amount' => $newStock]);
+                    $updatedCount++;
+                }
+            }
+
+            Log::info("Synced {$updatedCount} products stock");
+            return $updatedCount;
+
+        } catch (\Exception $e) {
+            Log::error('MoySklad syncStocks error: ' . $e->getMessage());
             return 0;
         }
-
-        $rows = $response->json()['rows'] ?? [];
-        $count = 0;
-
-        foreach ($rows as $row) {
-            $href = $row['meta']['href'] ?? '';
-            $moyskladId = null;
-
-            if ($href) {
-                $cleanHref = explode('?', $href)[0];
-                $parts = explode('/', $cleanHref);
-                $moyskladId = end($parts);
-            }
-
-            $stock = $row['stockByStore'][0]['stock'] ?? 0;
-
-            if ($moyskladId) {
-                Product::where('moysklad_id', $moyskladId)->update(['amount' => $stock]);
-                $count++;
-            }
-        }
-
-        Log::info('Synced ' . $count . ' stocks');
-        return $count;
     }
 
     public function updateStocs($request, $product)
