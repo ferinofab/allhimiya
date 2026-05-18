@@ -127,18 +127,7 @@
                             </div>
                             <div class="d-grid mt-auto">
                                 @if($product->amount > 0)
-                                    @if(Auth::user()->is_admin ?? false)
-                                        {{-- Кнопки для админа --}}
-                                        <div class="d-flex gap-2 mb-2">
-                                            <a href="/admin/products/{{ $product->id }}/edit"
-                                               class="btn btn-primary btn-sm flex-grow-1">✏️ Изменить</a>
-                                            <a href="/admin/products/{{ $product->id }}/images"
-                                               class="btn btn-secondary btn-sm flex-grow-1">🖼️ Фото</a>
-                                        </div>
-                                    @else
-                                        {{-- Кнопка для пользователя --}}
-                                            <a href="{{ route('product', $product->id) }}" class="btn btn-primary">Подробнее</a>
-                                    @endif
+                                    <a href="{{ route('product', $product->id) }}" class="btn btn-primary">Подробнее</a>
                                 @else
                                     {{-- Кнопка "Нет в наличии" (disabled) --}}
                                     <button class="btn btn-secondary" disabled>
