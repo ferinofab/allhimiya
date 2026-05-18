@@ -71,7 +71,7 @@ class MoySkladService
                 'verify' => false,
                 'decode_content' => true,
             ])->get($this->apiUrl . 'report/stock/all', [
-                'limit' => 1000,
+                'limit' => 100,
             ]);
 
             if (!$response->successful()) {
