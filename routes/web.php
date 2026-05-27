@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\SyncController;
+use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\Frontend\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\CartController;
@@ -101,3 +102,10 @@ Route::get('/delivery', [PageController::class, 'delivery'])->name('delivery');
 Route::get('/return', [PageController::class, 'return'])->name('return');
 Route::get('/contacts', [PageController::class, 'contacts'])->name('contacts');
 Route::post('/contact/send', [PageController::class, 'sendContact'])->name('contact.send');
+
+
+Route::post('/cookie-consent', [CookieConsentController::class, 'consent'])->name('cookie.consent');
+
+Route::get('/privacy-policy', function () {
+    return view('privacy-policy');
+})->name('privacy.policy');
